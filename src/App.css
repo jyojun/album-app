@@ -1,0 +1,95 @@
+/* 만들어놓고 필요한 곳에서 쓸 수 있다 */
+:root {
+  --text-color: #eee5e9;
+  --background-color: #d2bcdb;
+  --accent-color: #8f148f52;
+}
+.navbar {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  padding: 22px 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+  position: fixed;
+}
+
+.navbar-logo {
+  font-size: 24px;
+  /* color: var(--text-color); */
+}
+
+.navbar-logo i {
+  color: var(--accent-color);
+}
+
+/* menu */
+
+.navbar-menu {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+}
+.navbar-menu li {
+  padding: 8px 12px;
+}
+
+.navbar-menu li:hover {
+  background-color: var(--accent-color);
+  border-radius: 5px;
+}
+
+/* icon */
+.navbar-icon {
+  justify-content: flex-end;
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  color: var(--text-color);
+}
+
+.navbar-icon li {
+  font-size: larger;
+  padding: 8px 12px;
+}
+
+.navbar-more {
+  display: none;
+  position: absolute;
+  right: 32px;
+  font-size: 24px;
+  color: var(--accent-color);
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 24px;
+  }
+
+  .navbar-menu {
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+  }
+  ￼ .navbar-menu a {
+    display: block;
+  }
+
+  .navbar-icon {
+    display: none;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .navbar-more {
+    display: block;
+  }
+
+  .navbar-menu.active,
+  .navbar-icon.active {
+    display: flex;
+  }
+}
