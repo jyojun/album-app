@@ -5,6 +5,38 @@ import ImageListItem from "@mui/material/ImageListItem";
 import { PhotosDiv } from "../../Style/PhotoCSS";
 import axios from "axios";
 function Photo({ Album }) {
+  const breakpoints = {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920,
+  };
+
+  const getColumns = (width) => {
+    if (width < breakpoints.sm) {
+      return 2;
+    } else if (width < breakpoints.md) {
+      return 3;
+    } else if (width < breakpoints.lg) {
+      return 4;
+    } else if (width < breakpoints.xl) {
+      return 5;
+    } else {
+      return 6;
+    }
+  };
+
+  const [columns, setColumns] = useState(getColumns(window.innerWidth));
+  const updateDimensions = () => {
+    setColumns(getColumns(window.innerWidth));
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   const [Photos, setPhotos] = useState([]);
 
   const getPhotos = () => {
@@ -25,7 +57,7 @@ function Photo({ Album }) {
   }, [Photos]);
   return (
     <PhotosDiv>
-      <ImageList sx={{}} cols={5} gap={100}>
+      <ImageList className="my-image-list" sx={{}} cols={columns} gap={100}>
         {Photos.map((item) => (
           <ImageListItem
             style={{ boxShadow: "0 40px 40px -40px black" }}

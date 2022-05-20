@@ -21,8 +21,6 @@ function Albums() {
   useEffect(() => {
     getAlbums();
     getUsers();
-    console.log(Albums);
-    console.log(Users);
   }, []);
 
   const getAlbums = async () => {
@@ -52,7 +50,7 @@ function Albums() {
   };
   return (
     <AlbumDiv>
-      <button
+      {/* <button
         onClick={() => {
           setUsers([
             ...Users,
@@ -84,7 +82,7 @@ function Albums() {
         }}
       >
         Create User
-      </button>
+      </button> */}
       <Link to="upload">Create Album</Link>
       <AlbumUpload
         Albums={Albums}

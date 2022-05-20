@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../App";
 
 function Navbar() {
+  const Auth = useContext(AuthContext);
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -16,9 +19,20 @@ function Navbar() {
         <li>
           <Link to="/albums">Albums</Link>
         </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
+        {Auth.isAuthenticated ? (
+          <li
+            onClick={() => {
+              localStorage.removeItem("auth-token");
+              Auth.logout();
+            }}
+          >
+            Logout
+          </li>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
