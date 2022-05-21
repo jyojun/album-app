@@ -21,4 +21,8 @@ const AlbumDetailDiv = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export { AlbumDiv, AlbumDetailDiv };
+
+const AlbumUploadDiv = styled.div`
+  width: 100%;
+`;
+export { AlbumDiv, AlbumDetailDiv, AlbumUploadDiv };

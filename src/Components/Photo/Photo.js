@@ -3,14 +3,12 @@ import React, { useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { PhotosDiv } from "../../Style/PhotoCSS";
-import axios from "axios";
-function Photo({ Album }) {
+
+function Photo({ Album, Photos }) {
   const breakpoints = {
     xs: 0,
     sm: 600,
     md: 960,
-    lg: 1280,
-    xl: 1920,
   };
 
   const getColumns = (width) => {
@@ -18,12 +16,8 @@ function Photo({ Album }) {
       return 2;
     } else if (width < breakpoints.md) {
       return 3;
-    } else if (width < breakpoints.lg) {
-      return 4;
-    } else if (width < breakpoints.xl) {
-      return 5;
     } else {
-      return 6;
+      return 3;
     }
   };
 
@@ -37,28 +31,19 @@ function Photo({ Album }) {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  const [Photos, setPhotos] = useState([]);
+  const [AlbumPhotos, setAlbumPhotos] = useState([]);
 
   const getPhotos = () => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/photos?albumId=${Album.id}`)
-      .then((res) => {
-        if (Photos.length === 0) {
-          // 비어있을 때만 정보 받기
-          setPhotos(res.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setAlbumPhotos(Photos.filter((photo) => photo.albumId === Album.id));
   };
   useEffect(() => {
     getPhotos();
   }, [Photos]);
+  // console.log(usePhoto.Photos);
   return (
     <PhotosDiv>
       <ImageList className="my-image-list" sx={{}} cols={columns} gap={100}>
-        {Photos.map((item) => (
+        {AlbumPhotos.map((item) => (
           <ImageListItem
             style={{ boxShadow: "0 40px 40px -40px black" }}
             key={item.url}

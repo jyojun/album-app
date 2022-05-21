@@ -4,7 +4,7 @@ import Gallery from "react-photo-gallery";
 import { photos } from "./Home.js";
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../App";
+import { AuthContext } from "../Context/Auth";
 
 function Login() {
   const [Email, setEmail] = useState("");
@@ -17,6 +17,10 @@ function Login() {
       email: "test@test.com",
       password: "12341234",
     };
+
+    if (Email === "" || Password === "") {
+      return alert("Email or Password should not be empty!");
+    }
 
     if (Email === dummyUser.email && Password === dummyUser.password) {
       const token = "testtoken123123";
@@ -36,6 +40,7 @@ function Login() {
             style={{ width: "100%", marginBottom: "1rem" }}
             id="outlined-basic"
             label="Email"
+            placeholder="test@test.com"
             variant="outlined"
             value={Email}
             onChange={(e) => setEmail(e.target.value)}
@@ -45,6 +50,7 @@ function Login() {
             style={{ width: "100%", marginBottom: "1rem" }}
             id="outlined-basic"
             label="Password"
+            placeholder="12341234"
             type="password"
             variant="outlined"
             value={Password}

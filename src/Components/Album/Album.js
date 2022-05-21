@@ -15,6 +15,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
+import Photo from "../Photo/Photo";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -27,10 +28,14 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function Album({ user, album, setAlbums, Albums }) {
+export default function Album({ user, album, setAlbums, Albums, Photos }) {
   const [expanded, setExpanded] = useState(false);
   const [PopUp, setPopUp] = useState(false);
   const [Title, setTitle] = useState("");
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   const handleEdit = (e) => {
     e.preventDefault();
@@ -133,16 +138,16 @@ export default function Album({ user, album, setAlbums, Albums }) {
           </div>
         </div>
       )}
-      <Link style={{ textDecoration: "none" }} to={`${album.id}`}>
-        <CardMedia
-          component="img"
-          height="194"
-          image={`https://place-hold.it/600X300/${stringToColor(
-            album.title
-          )}/?text=${album.title}`}
-          alt="Paella dish"
-        />
-      </Link>
+
+      <CardMedia
+        component="img"
+        height="194"
+        image={`https://place-hold.it/600X300/${stringToColor(
+          album.title
+        )}/?text=${album.title}`}
+        alt="Paella dish"
+      />
+
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           This impressive paella is a perfect party dish and a fun meal to cook
@@ -157,7 +162,20 @@ export default function Album({ user, album, setAlbums, Albums }) {
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
       </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Photo Album={album} Photos={Photos} />
+        </CardContent>
+      </Collapse>
     </Card>
   );
 }

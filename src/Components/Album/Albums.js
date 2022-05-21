@@ -10,9 +10,34 @@ import AlbumUpload from "./AlbumUpload";
 
 function Albums() {
   const [Albums, setAlbums] = useState([]);
+  const [Photos, setPhotos] = useState([]);
   const [Users, setUsers] = useState([]);
   const [Offset, setOffset] = useState(1);
   const [Limit, setLimit] = useState(5);
+
+  const currentUser = {
+    id: 11,
+    name: "Hyojun Park",
+    username: "Hyojun",
+    email: "parkcode98@gmail.com",
+    address: {
+      street: "Kulas Light",
+      suite: "Apt. 556",
+      city: "Gwenborough",
+      zipcode: "13289",
+      geo: {
+        lat: "-37.3159",
+        lng: "81.1496",
+      },
+    },
+    phone: "010-2504-5532",
+    website: "github.com/jyojun",
+    company: {
+      name: "Freedsoft",
+      catchPhrase: "Multi-layered client-server neural-net",
+      bs: "harness real-time e-markets",
+    },
+  };
 
   const pagination = (array, page_size, page_number) => {
     return array.slice((page_number - 1) * page_size, page_number * page_size);
@@ -21,6 +46,7 @@ function Albums() {
   useEffect(() => {
     getAlbums();
     getUsers();
+    getPhotos();
   }, []);
 
   const getAlbums = async () => {
@@ -41,7 +67,20 @@ function Albums() {
       .get("https://jsonplaceholder.typicode.com/users")
       .then((res) => {
         if (Users.length === 0) {
-          setUsers(res.data);
+          setUsers([...res.data, currentUser]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getPhotos = async () => {
+    await axios
+      .get("https://jsonplaceholder.typicode.com/photos")
+      .then((res) => {
+        if (Photos.length === 0) {
+          setPhotos(res.data);
         }
       })
       .catch((err) => {
@@ -50,45 +89,13 @@ function Albums() {
   };
   return (
     <AlbumDiv>
-      {/* <button
-        onClick={() => {
-          setUsers([
-            ...Users,
-            {
-              id: 11,
-              name: "Hyojun Park",
-              username: "Hyojun",
-              email: "parkcode98@gmail.com",
-              address: {
-                street: "Kulas Light",
-                suite: "Apt. 556",
-                city: "Gwenborough",
-                zipcode: "13289",
-                geo: {
-                  lat: "-37.3159",
-                  lng: "81.1496",
-                },
-              },
-              phone: "010-2504-5532",
-              website: "github.com/jyojun",
-              company: {
-                name: "Freedsoft",
-                catchPhrase: "Multi-layered client-server neural-net",
-                bs: "harness real-time e-markets",
-              },
-            },
-          ]);
-          console.log(Users);
-        }}
-      >
-        Create User
-      </button> */}
-      <Link to="upload">Create Album</Link>
       <AlbumUpload
         Albums={Albums}
         setAlbums={setAlbums}
         Users={Users}
         setUsers={setUsers}
+        Photos={Photos}
+        setPhotos={setPhotos}
       />
       {pagination(Albums, Limit, Offset).map((album, idx) => {
         return (
@@ -101,6 +108,7 @@ function Albums() {
                     album={album}
                     Albums={Albums}
                     setAlbums={setAlbums}
+                    Photos={Photos}
                   />
                 );
               }
