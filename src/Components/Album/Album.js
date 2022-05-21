@@ -9,13 +9,17 @@ import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SendIcon from "@mui/icons-material/Send";
+
+import axios from "axios";
 import Photo from "../Photo/Photo";
+import { TextField } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,17 +35,34 @@ const ExpandMore = styled((props) => {
 export default function Album({ user, album, setAlbums, Albums, Photos }) {
   const [expanded, setExpanded] = useState(false);
   const [PopUp, setPopUp] = useState(false);
-  const [Title, setTitle] = useState("");
+  const [Title, setTitle] = useState(album.title);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   const handleEdit = (e) => {
+    if (album.userId !== 101) {
+      return alert("you have no access to this album");
+    }
+    let editedAlbum = {
+      userId: album.userId,
+      id: album.id,
+      title: Title,
+    };
     e.preventDefault();
+    axios.put(
+      `https://jsonplaceholder.typicode.com/albums/${album.id}`,
+      editedAlbum
+    );
+    setAlbums([editedAlbum, ...Albums.filter((item) => item.id !== album.id)]);
   };
-  const handleDelete = () => {
-    if (window.confirm("Are you sure to delete?") == true) {
+  const handleDelete = async () => {
+    if (album.userId !== 101) {
+      return alert("you have no access to this album");
+    }
+    if (window.confirm("Are you sure to delete?") === true) {
+      axios.delete(`https://jsonplaceholder.typicode.com/albums/${album.id}`);
       setAlbums(Albums.filter((item) => item.id !== album.id));
       console.log(Albums);
     } else {
@@ -105,10 +126,9 @@ export default function Album({ user, album, setAlbums, Albums, Photos }) {
             className="modalDiv"
             style={{
               position: "absolute",
+              padding: "10px",
               background: "blue",
               right: "10px",
-              width: "80px",
-              height: "80px",
               backgroundColor: "whitesmoke",
               boxShadow:
                 "0px 5px 10px rgba(0, 0, 0, 0.03), 0px 7.5px 6px rgba(0, 0, 0, 0.1)",
@@ -121,20 +141,34 @@ export default function Album({ user, album, setAlbums, Albums, Photos }) {
               alignItems: "center",
             }}
           >
-            <button onClick={handleEdit} style={{ border: "none" }}>
-              <input
-                type="text"
-                value={Title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              style={{ border: "none", marginTop: "1rem" }}
+            <TextField
+              type="text"
+              value={Title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: "1rem",
+              }}
             >
-              Delete
-            </button>
+              <Button
+                style={{ marginRight: "1rem" }}
+                onClick={handleEdit}
+                endIcon={<SendIcon />}
+              >
+                Edit
+              </Button>
+              <Button
+                style={{ color: "red" }}
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            </div>
           </div>
         </div>
       )}

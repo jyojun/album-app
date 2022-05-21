@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AlbumUploadDiv } from "../../Style/AlbumCSS";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import { TextField } from "@mui/material";
 
 function AlbumUpload({ Albums, setAlbums, Photos, setPhotos }) {
   const [Title, setTitle] = useState("");
@@ -48,20 +51,26 @@ function AlbumUpload({ Albums, setAlbums, Photos, setPhotos }) {
   };
   return (
     <AlbumUploadDiv>
+      <h3>New Album</h3>
       <form
         onSubmit={(e) => {
           onSubmit(e);
         }}
       >
-        <label>Title</label>
-        <input
+        <TextField
           onChange={(e) => {
             setTitle(e.target.value);
           }}
+          label="Title"
+          placeholder="Type New Album Title"
+          variant="standard"
           type="text"
           value={Title}
+          required
         />
-        <button type="submit">Create New Album</button>
+        <Button endIcon={<SendIcon />} type="submit">
+          Create New Album
+        </Button>
       </form>
     </AlbumUploadDiv>
   );

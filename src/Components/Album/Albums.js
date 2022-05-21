@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 
 import Album from "./Album";
 import { AlbumDiv } from "../../Style/AlbumCSS";
 
 import { Pagination } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AlbumUpload from "./AlbumUpload";
+import { AuthContext } from "../../Context/Auth";
 
 function Albums() {
   const [Albums, setAlbums] = useState([]);
@@ -14,6 +15,15 @@ function Albums() {
   const [Users, setUsers] = useState([]);
   const [Offset, setOffset] = useState(1);
   const [Limit, setLimit] = useState(5);
+  const Auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!Auth.isAuthenticated) {
+      alert("Please Login");
+      navigate("/login");
+    }
+  }, []);
 
   const currentUser = {
     id: 11,
