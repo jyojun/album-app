@@ -42,7 +42,7 @@ export default function Album({ user, album, setAlbums, Albums, Photos }) {
   };
 
   const handleEdit = (e) => {
-    if (album.userId !== 101) {
+    if (album.userId !== 11) {
       return alert("you have no access to this album");
     }
     let editedAlbum = {
@@ -58,7 +58,7 @@ export default function Album({ user, album, setAlbums, Albums, Photos }) {
     setAlbums([editedAlbum, ...Albums.filter((item) => item.id !== album.id)]);
   };
   const handleDelete = async () => {
-    if (album.userId !== 101) {
+    if (album.userId !== 11) {
       return alert("you have no access to this album");
     }
     if (window.confirm("Are you sure to delete?") === true) {
